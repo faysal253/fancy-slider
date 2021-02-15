@@ -1,4 +1,4 @@
-# fancy-slider
+# 👉fancy-slider💲
 there are 5 problem fixed in here:
 1. api issue✔🔰
 2. slider issue✔

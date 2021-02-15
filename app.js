@@ -8,9 +8,7 @@ const sliderContainer = document.getElementById('sliders');
 let sliders = [];
 
 
-// If this key doesn't work
-// Find the name in the url and go to their website
-// to create your own api key
+// api key
 const KEY = '20271909-2b2ae56f78332a1a48004d141&q';
 
 // show images 
@@ -24,15 +22,17 @@ const showImages = (images) => {
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
+    toggleSpinner(false);
   })
 
 }
 
 const getImages = (query) => {
+  toggleSpinner(true)
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
-    .catch(err => displayError(err))
+    .catch(error => displayError('Somethings wrong there!!!'))
 }
 
 let slideIndex = 0;
@@ -44,7 +44,8 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Quick toggle remove from this picture !')
+    sliders.splice(item, 1);
+    element.classList.remove('added');
   }
 }
 var timer
@@ -67,8 +68,9 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
-  console.log(duration);
+  const durationInput = document.getElementById('duration').value
+  const duration = durationInput >= 1000 ? durationInput : 1000;
+
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -118,6 +120,7 @@ searchBtn.addEventListener('click', function () {
   sliders.length = 0;
 })
 
+// enter key event
 document.getElementById('search')
   .addEventListener("keypress", function (event) {
     if (event.key == 'Enter') {
@@ -128,3 +131,20 @@ document.getElementById('search')
 sliderBtn.addEventListener('click', function () {
   createSlider()
 })
+
+// spinner 
+const toggleSpinner = (show) => {
+  const spinner = document.getElementById('loading-spinner')
+  if (show) {
+    spinner.classList.remove('d-none')
+  }
+  else {
+    spinner.classList.add('d-none')
+  }
+}
+
+// error handle
+const displayError = error => {
+  const errorMsg = document.getElementById('error-msg')
+  errorMsg.innerText = error
+}

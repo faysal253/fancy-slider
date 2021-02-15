@@ -7,5 +7,5 @@ there are 5 problem fixed in here:
 5. toggle remove✔
 
 extra added:
-1.Catch error handleing✔
-2.Loading spinner✔
+6.Catch error handleing✔
+7.Loading spinner✔
